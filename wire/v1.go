@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"io"
+	"log"
 )
 
 const (
@@ -17,7 +18,7 @@ type Message struct {
 	Data []byte
 }
 
-func (m *Message) WriteTo(w io.Writer) (int64, error) {
+func (m *Message) WriteTo(w io.Writer, dlogger *log.Logger) (int64, error) {
 	var (
 		rep  [packetLen]byte
 		kind = m.Kind
@@ -64,7 +65,7 @@ var (
 	ErrMalformedMessage = errors.New("malformed wire format")
 )
 
-func (m *Message) ReadFrom(r io.Reader) (int64, error) {
+func (m *Message) ReadFrom(r io.Reader, dlogger *log.Logger) (int64, error) {
 	var (
 		rep  [packetLen]byte
 		read = 0 // number of read bytes
